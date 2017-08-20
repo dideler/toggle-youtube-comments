@@ -9,6 +9,8 @@ function toggleComments() {
 	}	else {
 		label.textContent = 'Hide comments';
 	}
+
+	showReadMore();
 }
 
 function inject() {
@@ -29,6 +31,19 @@ function addButton() {
 
 	document.getElementById('action-panel-details').innerHTML += button;
 	document.getElementById('toggle-comments').addEventListener('click', toggleComments);
+}
+
+function showReadMore() {
+	showReadMore = function() {}; // Become a no-op after executing.
+
+	const maxHeight = 65;
+	const commentContents = document.getElementsByClassName('comment-renderer-text-content');
+
+	for (var comment of commentContents) {
+		if (comment.scrollHeight > maxHeight) {
+			comment.nextElementSibling.classList.remove('hid');
+		}
+	};
 }
 
 (function () {
