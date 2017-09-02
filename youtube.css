@@ -20,7 +20,7 @@
   user-select: none;
   cursor: pointer;
   z-index: 0;
-  padding: 0.7em 0.57em;
+  padding: 0 0 0 0.57em;
   background-color: var(--paper-button_-_background-color);
   border: var(--paper-button_-_border);
   color: var(--paper-button_-_color);
