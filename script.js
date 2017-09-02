@@ -27,6 +27,9 @@ function toggleComments() {
 }
 
 function inject(e) {
+  if (window.location.pathname != '/watch') {
+    return; // only inject on video pages
+  }
   if (e.type == 'spfdone') {
     injected = false; // old UI requires re-injection on navigation
   }
