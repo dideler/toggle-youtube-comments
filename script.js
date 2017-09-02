@@ -28,23 +28,23 @@ function toggleComments() {
 
 function inject(e) {
   if (e.type == 'spfdone') {
-    injected = false; // reset for old UI navigation
+    injected = false; // old UI requires re-injection on navigation
   }
   if (injected) {
-    return; // guard clause because event 'yt-register-action' fires many times
+    return; // guard clause because we're using a generic event that fires many times
   }
 
   if (isOldInterface()) {
     addClass();
     addButton();
   } else {
-    if (e.target.id != 'comments') {
-      return; // do not inject if triggering too early
+    if (e.target.tagName != 'YTD-VIDEO-SECONDARY-INFO-RENDERER') {
+      return;
     }
 
     const oldTriggerEvents = ['DOMContentLoaded', 'spfdone'];
     if (oldTriggerEvents.includes(e.type)) {
-      return; // do not inject for old UI events on new UI
+      return; // do not inject on old UI events
     }
 
     addNewClass();
@@ -110,7 +110,8 @@ function showReadMore() {
 }
 
 (function() {
-  document.addEventListener('DOMContentLoaded', inject); // Static navigation (i.e. initial page load)
-  document.addEventListener('spfdone', inject); // Dynamic navigation (i.e. subsequent page loads)
-  document.addEventListener('yt-register-action', inject); // Polymer event for new UI
+  document.addEventListener('DOMContentLoaded', inject); // Old: Static navigation (i.e. initial page load)
+  document.addEventListener('spfdone', inject); // Old: Dynamic navigation (i.e. subsequent page loads)
+
+  document.addEventListener('yt-visibility-refresh', inject); // New: Inject on info panel render.
 })();
