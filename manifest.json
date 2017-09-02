@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Toggle YouTube Comments",
-  "description": "Disables YouTube comments by default",
+  "description": "Hides YouTube comments by default",
   "version": "2.0.3",
 
   "icons": {
