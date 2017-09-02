@@ -1,9 +1,9 @@
-|<h2>Toggle YouTube Comments</h2><br>![](icons/128.png)|
+|<h2>[Toggle YouTube Comments][store]</h2><br>[![](icons/128.png)][store]|
 |:---:|
-|It's dangerous to go alone. Take this.<br>Collapses YouTube comments by default.|
-|_<sup>Extension listens for YouTube [SPF events].</sup><br><sup>Icon by [Gregor Cresnar]. Licensed under [CC BY 3.0].</sup>_|
+|Collapses YouTube comments by default.|
+|_<sup>Icon by [Gregor Cresnar]. Licensed under [CC BY 3.0].</sup>_|
 
 
-[SPF events]: https://youtube.github.io/spfjs/documentation/events/
+[store]: https://chrome.google.com/webstore/detail/toggle-youtube-comments/ampjnmipdgicjjidohpkidhghakoidfm
 [Gregor Cresnar]: http://www.flaticon.com/authors/gregor-cresnar
 [CC BY 3.0]: http://creativecommons.org/licenses/by/3.0/ "Creative Commons Attribution 3.0 Unported"
