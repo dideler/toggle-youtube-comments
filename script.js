@@ -83,13 +83,14 @@ function addNewClass() {
 }
 
 function addNewButton() {
+  const moreButton = document.getElementById('more');
+  const style = moreButton.hidden ? 'style="margin-left:0"' : '';
   const button = `
-	<button class="fake-paper-button" id="toggle-comments" type="button">
+	<button class="fake-paper-button" id="toggle-comments" ${style} type="button">
 		<span class="fake-yt-formatted-string">Show comments</span>
 	</button>
 	`;
 
-  const moreButton = document.getElementById('more');
   moreButton.insertAdjacentHTML('afterend', button);
 
   document
