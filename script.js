@@ -30,6 +30,9 @@ function inject(e) {
   if (window.location.pathname != '/watch') {
     return; // only inject on video pages
   }
+  if (document.getElementsByClassName('ytp-live')) {
+    return; // live videos have chat instead of comments
+  }
   if (e.type == 'spfdone') {
     injected = false; // old UI requires re-injection on navigation
   }
