@@ -27,10 +27,10 @@ function toggleComments() {
 }
 
 function inject(e) {
-  if (window.location.pathname != '/watch') {
+  if (!isVideo()) {
     return; // only inject on video pages
   }
-  if (document.getElementsByClassName('ytp-live')) {
+  if (isLiveVideo()) {
     return; // live videos have chat instead of comments
   }
   if (e.type == 'spfdone') {
@@ -58,6 +58,14 @@ function inject(e) {
   }
 
   injected = true;
+}
+
+function isVideo() {
+  return window.location.pathname === '/watch';
+}
+
+function isLiveVideo() {
+  return document.getElementsByClassName('ytp-live').length !== 0;
 }
 
 function isOldInterface() {
