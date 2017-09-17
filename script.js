@@ -1,132 +1,177 @@
 'use strict';
 
-let injected = false;
+const injectorFactory = {
+  youtubeInstance() {
+    return this._isNewInterface() ? newYouTube : oldYouTube;
+  },
 
-function newToggleComments() {
-  const label = document.getElementById('toggle-comments').firstElementChild;
-  const comments = document.getElementById('comments');
+  _isNewInterface() {
+    return document.body.hasAttribute('invert');
+  },
+};
 
-  if (comments.classList.toggle('hide-comments')) {
-    label.textContent = 'Show comments';
-  } else {
-    label.textContent = 'Hide comments';
-  }
-}
-
-function toggleComments() {
-  const label = document.getElementById('toggle-comments').firstElementChild;
-  const comments = document.getElementById('watch-discussion');
-
-  if (comments.classList.toggle('hide-comments')) {
-    label.textContent = 'Show comments';
-  } else {
-    label.textContent = 'Hide comments';
-  }
-
-  showReadMore();
-}
-
-function inject(e) {
-  if (!isVideo()) {
-    return; // only inject on video pages
-  }
-  if (isLiveVideo()) {
-    return; // live videos have chat instead of comments
-  }
-  if (e.type == 'spfdone') {
-    injected = false; // old UI requires re-injection on navigation
-  }
-  if (injected) {
-    return; // guard clause because we're using a generic event that fires many times
-  }
-
-  if (isOldInterface()) {
-    addClass();
-    addButton();
-  } else {
-    if (e.target.tagName != 'YTD-VIDEO-SECONDARY-INFO-RENDERER') {
-      return;
-    }
-
-    const oldTriggerEvents = ['DOMContentLoaded', 'spfdone'];
-    if (oldTriggerEvents.includes(e.type)) {
-      return; // do not inject on old UI events
-    }
-
-    addNewClass();
-    addNewButton();
-  }
-
-  injected = true;
-}
-
-function isVideo() {
+const isVideo = () => {
   return window.location.pathname === '/watch';
-}
+};
 
-function isLiveVideo() {
+const isLiveVideo = () => {
   return document.getElementsByClassName('ytp-live').length !== 0;
-}
+};
 
-function isOldInterface() {
-  return !!document.getElementById('watch-discussion');
-}
+const oldYouTube = {
+  isVideo,
+  isLiveVideo,
 
-function addClass() {
-  document.getElementById('watch-discussion').className += ' hide-comments';
-}
+  type() {
+    return 'OLD';
+  },
 
-function addButton() {
-  const button = `
-	<button class="yt-uix-button yt-uix-button-size-default yt-uix-button-expander" id="toggle-comments" type="button">
-		<span class="yt-uix-button-content">Show comments</span>
-	</button>
-	`;
+  registerListeners() {
+    document.addEventListener('spfdone', oldYouTube.inject); // Inject on dynamic navigation (subsequent page loads)
+  },
 
-  document.getElementById('action-panel-details').innerHTML += button;
-  document
-    .getElementById('toggle-comments')
-    .addEventListener('click', toggleComments);
-}
+  inject() {
+    debugLog('ATTEMPTING TO INJECT...');
+    if (!oldYouTube._ready()) return;
 
-function addNewClass() {
-  document.getElementById('comments').className += ' hide-comments';
-}
+    oldYouTube._addClass();
+    oldYouTube._addButton();
+  },
 
-function addNewButton() {
-  const moreButton = document.getElementById('more');
-  const style = moreButton.hidden ? 'style="margin-left:0"' : '';
-  const button = `
-	<button class="fake-paper-button" id="toggle-comments" ${style} type="button">
-		<span class="fake-yt-formatted-string">Show comments</span>
-	</button>
-	`;
+  _ready() {
+    return oldYouTube.isVideo() && !oldYouTube.isLiveVideo();
+  },
 
-  moreButton.insertAdjacentHTML('afterend', button);
+  _addClass() {
+    debugLog('ADDING CLASS...');
+    document.getElementById('watch-discussion').classList.add('hide-comments');
+  },
 
-  document
-    .getElementById('toggle-comments')
-    .addEventListener('click', newToggleComments);
-}
+  _addButton() {
+    debugLog('ADDING BUTTON...');
+    const button = `
+    <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-expander" id="toggle-comments" type="button">
+      <span class="yt-uix-button-content">Show comments</span>
+    </button>
+    `;
 
-function showReadMore() {
-  showReadMore = function() {}; // Become a no-op after executing.
+    document.getElementById('action-panel-details').innerHTML += button;
+    document
+      .getElementById('toggle-comments')
+      .addEventListener('click', oldYouTube._toggleComments);
+  },
 
-  const maxHeight = 65;
-  const commentContents = document.getElementsByClassName(
-    'comment-renderer-text-content',
-  );
+  _toggleComments() {
+    const label = document.getElementById('toggle-comments').firstElementChild;
+    const comments = document.getElementById('watch-discussion');
 
-  for (var comment of commentContents) {
-    if (comment.scrollHeight > maxHeight) {
-      comment.nextElementSibling.classList.remove('hid');
+    if (comments.classList.toggle('hide-comments')) {
+      label.textContent = 'Show comments';
+    } else {
+      label.textContent = 'Hide comments';
     }
-  }
+
+    oldYouTube._showReadMore();
+  },
+
+  _showReadMore() {
+    oldYouTube._showReadMore = function() {}; // Become a no-op after executing.
+
+    const maxHeight = 65;
+    const commentContents = document.getElementsByClassName(
+      'comment-renderer-text-content',
+    );
+
+    for (var comment of commentContents) {
+      if (comment.scrollHeight > maxHeight) {
+        comment.nextElementSibling.classList.remove('hid');
+      }
+    }
+  },
+};
+
+const newYouTube = {
+  isVideo,
+  isLiveVideo,
+
+  type() {
+    return 'NEW';
+  },
+
+  registerListeners() {
+    document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject on info panel render.
+  },
+
+  inject(e) {
+    debugLog('ATTEMPTING TO INJECT...');
+    if (!newYouTube._ready(e)) return;
+
+    newYouTube._addClass();
+    newYouTube._addButton();
+
+    document.removeEventListener('yt-visibility-refresh', newYouTube.inject);
+  },
+
+  _ready(e) {
+    return (
+      newYouTube.isVideo() &&
+      !newYouTube.isLiveVideo() &&
+      newYouTube._isInfoPanelRendered(e)
+    );
+  },
+
+  _isInfoPanelRendered(e) {
+    return (
+      typeof e !== 'undefined' &&
+      e.type === 'yt-visibility-refresh' &&
+      (e.target.tagName === 'YT-IMG-SHADOW' ||
+        e.target.tagName === 'YTD-VIDEO-SECONDARY-INFO-RENDERER')
+    );
+  },
+
+  _addClass() {
+    debugLog('ADDING CLASS...');
+    document.getElementById('comments').classList.add('hide-comments');
+  },
+
+  _addButton() {
+    debugLog('ADDING BUTTON...');
+    const moreButton = document.getElementById('more');
+    const style = moreButton.hidden ? 'style="margin-left:0"' : ''; // FIXME: Temp appears as hidden when nav from index to video
+    const button = `
+    <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
+      <span class="fake-yt-formatted-string">Show comments</span>
+    </button>
+    `;
+
+    moreButton.insertAdjacentHTML('afterend', button);
+
+    document
+      .getElementById('toggle-comments')
+      .addEventListener('click', newYouTube._toggleComments);
+  },
+
+  _toggleComments() {
+    const label = document.getElementById('toggle-comments').firstElementChild;
+    const comments = document.getElementById('comments');
+
+    if (comments.classList.toggle('hide-comments')) {
+      label.textContent = 'Show comments';
+    } else {
+      label.textContent = 'Hide comments';
+    }
+  },
+};
+
+const IS_DEV_MODE = !('update_url' in chrome.runtime.getManifest()); // Chrome Web Store adds update_url attribute.
+
+function debugLog(str) {
+  if (IS_DEV_MODE) console.log(str);
 }
 
 (function() {
-  document.addEventListener('DOMContentLoaded', inject); // Old: Static navigation (i.e. initial page load)
-  document.addEventListener('spfdone', inject); // Old: Dynamic navigation (i.e. subsequent page loads)
-
-  document.addEventListener('yt-visibility-refresh', inject); // New: Inject on info panel render.
+  const youtube = injectorFactory.youtubeInstance();
+  debugLog(`DETECTED ${youtube.type()} UI`);
+  youtube.registerListeners();
+  youtube.inject();
 })();
