@@ -137,7 +137,7 @@ const newYouTube = {
   _addButton() {
     debugLog('ADDING BUTTON...');
     const moreButton = document.getElementById('more');
-    const style = moreButton.hidden ? 'style="margin-left:0"' : ''; // FIXME: Temp appears as hidden when nav from index to video
+    const style = moreButton.hidden ? 'style="margin-left:0"' : '';
     const button = `
     <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
       <span class="fake-yt-formatted-string">Show comments</span>
