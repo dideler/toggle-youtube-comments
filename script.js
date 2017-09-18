@@ -165,8 +165,8 @@ const newYouTube = {
 
 const IS_DEV_MODE = !('update_url' in chrome.runtime.getManifest()); // Chrome Web Store adds update_url attribute.
 
-function debugLog(str) {
-  if (IS_DEV_MODE) console.log(str);
+function debugLog(...args) {
+  if (IS_DEV_MODE) console.log(...args);
 }
 
 (function() {
