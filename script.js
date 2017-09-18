@@ -1,5 +1,10 @@
 'use strict';
 
+const globals = {
+  showComments: chrome.i18n.getMessage('showCommentsText'),
+  hideComments: chrome.i18n.getMessage('hideCommentsText'),
+};
+
 const injectorFactory = {
   youtubeInstance() {
     return this._isNewInterface() ? newYouTube : oldYouTube;
@@ -51,7 +56,7 @@ const oldYouTube = {
     debugLog('ADDING BUTTON...');
     const button = `
     <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-expander" id="toggle-comments" type="button">
-      <span class="yt-uix-button-content">Show comments</span>
+      <span class="yt-uix-button-content">${globals.showComments}</span>
     </button>
     `;
 
@@ -66,9 +71,9 @@ const oldYouTube = {
     const comments = document.getElementById('watch-discussion');
 
     if (comments.classList.toggle('hide-comments')) {
-      label.textContent = 'Show comments';
+      label.textContent = globals.showComments;
     } else {
-      label.textContent = 'Hide comments';
+      label.textContent = globals.hideComments;
     }
 
     oldYouTube._showReadMore();
@@ -140,7 +145,7 @@ const newYouTube = {
     const style = moreButton.hidden ? 'style="margin-left:0"' : '';
     const button = `
     <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
-      <span class="fake-yt-formatted-string">Show comments</span>
+      <span class="fake-yt-formatted-string">${globals.showComments}</span>
     </button>
     `;
 
@@ -156,9 +161,9 @@ const newYouTube = {
     const comments = document.getElementById('comments');
 
     if (comments.classList.toggle('hide-comments')) {
-      label.textContent = 'Show comments';
+      label.textContent = globals.showComments;
     } else {
-      label.textContent = 'Hide comments';
+      label.textContent = globals.hideComments;
     }
   },
 };
