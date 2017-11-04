@@ -11,7 +11,7 @@ const injectorFactory = {
   },
 
   _isNewInterface() {
-    return document.body.hasAttribute('invert');
+    return !!document.getElementById('polymer-app');
   },
 };
 
@@ -84,7 +84,7 @@ const oldYouTube = {
 
     const maxHeight = 65;
     const commentContents = document.getElementsByClassName(
-      'comment-renderer-text-content',
+      'comment-renderer-text-content'
     );
 
     for (var comment of commentContents) {
