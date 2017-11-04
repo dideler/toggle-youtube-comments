@@ -129,7 +129,8 @@ const newYouTube = {
     return (
       typeof e !== 'undefined' &&
       e.type === 'yt-visibility-refresh' &&
-      (e.target.tagName === 'YT-IMG-SHADOW' ||
+      (e.target.tagName === 'YTD-METADATA-ROW-CONTAINER-RENDERER' ||
+        e.target.tagName === 'YT-IMG-SHADOW' ||
         e.target.tagName === 'YTD-VIDEO-SECONDARY-INFO-RENDERER')
     );
   },
