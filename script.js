@@ -11,7 +11,15 @@ const injectorFactory = {
   },
 
   _isNewInterface() {
+    return this._isNewVideoPage() || this._isNewHomePage();
+  },
+
+  _isNewVideoPage() {
     return !!document.getElementById('polymer-app');
+  },
+
+  _isNewHomePage() {
+    return !!document.querySelector('ytd-app');
   },
 };
 
