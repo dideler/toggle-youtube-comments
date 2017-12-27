@@ -1,5 +1,6 @@
 .hide-comments {
-  display: none !important;
+  height: 0px;
+  overflow: hidden;
 }
 
 .fake-paper-button {
