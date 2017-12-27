@@ -137,14 +137,14 @@ const newYouTube = {
     return (
       typeof e !== 'undefined' &&
       e.type === 'yt-visibility-refresh' &&
-      (e.target.tagName === 'YT-IMG-SHADOW' ||
-        e.target.tagName === 'YTD-VIDEO-SECONDARY-INFO-RENDERER')
+      e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(ytd-comments)
     );
   },
 
   _addClass() {
     debugLog('ADDING CLASS...');
-    document.getElementById('comments').classList.add('hide-comments');
+    // document.getElementById('comments').classList.add('hide-comments');
+    document.querySelector('ytd-item-section-renderer.ytd-comments').classList.add('hide-comments');
   },
 
   _addButton() {
@@ -166,7 +166,8 @@ const newYouTube = {
 
   _toggleComments() {
     const label = document.getElementById('toggle-comments').firstElementChild;
-    const comments = document.getElementById('comments');
+    // const comments = document.getElementById('comments');
+    const comments = document.querySelector("ytd-item-section-renderer.ytd-comments");
 
     if (comments.classList.toggle('hide-comments')) {
       label.textContent = globals.showComments;
