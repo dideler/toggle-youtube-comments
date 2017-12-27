@@ -143,7 +143,6 @@ const newYouTube = {
 
   _addClass() {
     debugLog('ADDING CLASS...');
-    // document.getElementById('comments').classList.add('hide-comments');
     document.querySelector('ytd-item-section-renderer.ytd-comments').classList.add('hide-comments');
   },
 
@@ -166,7 +165,6 @@ const newYouTube = {
 
   _toggleComments() {
     const label = document.getElementById('toggle-comments').firstElementChild;
-    // const comments = document.getElementById('comments');
     const comments = document.querySelector("ytd-item-section-renderer.ytd-comments");
 
     if (comments.classList.toggle('hide-comments')) {
