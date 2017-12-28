@@ -1,6 +1,7 @@
 .hide-comments {
   height: 0px;
   overflow: hidden;
+  padding: 0 !important; /* this padding for oldYouTube */
 }
 
 .fake-paper-button {
