@@ -148,7 +148,10 @@ const newYouTube = {
 
   registerListeners() {
     document.addEventListener('yt-register-action', newYouTube.inject); // Inject the button on comments render.
-    document.addEventListener('yt-page-data-updated', newYouTube.injectCommentsCount); // Asynchronously get comments count when navigated to video page
+    document.addEventListener('yt-page-data-updated', e => {
+      newYouTube.injectCommentsCount(e);
+      newYouTube._forceHideComments(e);
+    }); // Asynchronously get comments count when navigated to video page
     window.addEventListener('focus', newYouTube._waitCommentsCount); // When the YouTube tab is in the background state and navigate to the next movie by auto-play, the node of comments is not updated. So set this event when the user returns to Youtube tab.
   },
 
@@ -208,6 +211,22 @@ const newYouTube = {
     document
       .getElementById('toggle-comments')
       .addEventListener('click', newYouTube._toggleComments);
+  },
+
+  _forceHideComments(e) {
+    const buttonLabel = document.getElementById('toggle-comments-label');
+    const countLabel = document.getElementById('comments-count');
+    const comments = document.querySelector
+    ("ytd-item-section-renderer.ytd-comments");
+
+    if (!newYouTube._ready(e) || !comments) return;
+
+    if (!comments.classList.contains('hide-comments')) {
+      console.log('FORCE HIDE COMMENTS...');
+      comments.classList.add('hide-comments'); // force hide comments
+      buttonLabel.textContent = l11n.showComments; // restore button label
+      countLabel.classList.remove('is-hide'); // restore count label
+    }
   },
 
   _toggleComments() {
