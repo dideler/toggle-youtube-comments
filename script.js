@@ -112,13 +112,21 @@ const newYouTube = {
   },
 
   registerListeners() {
-    document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject on info panel render.
+    const pageUpdateListener = document.addEventListener('yt-page-data-updated', refreshListener); // when page updated(loaded) event ≒ page jump detection
+    function refreshListener() { 
+      debugLog('PAGE UPDATE DETECTED...')
+      document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject on info panel render.
+    };
   },
 
   inject(e) {
     debugLog('ATTEMPTING TO INJECT...');
-    if (!newYouTube._ready(e)) return;
+    // debugLog('_EVENT?', e)
+    debugLog('_IS READY?', newYouTube._ready(e))
 
+    if (!newYouTube._ready(e)) return;
+    
+    newYouTube._removeButton();
     newYouTube._addClass();
     newYouTube._addButton();
 
@@ -137,7 +145,11 @@ const newYouTube = {
     return (
       typeof e !== 'undefined' &&
       e.type === 'yt-visibility-refresh' &&
-      e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(ytd-comments)
+      (
+        e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' || // this mean: rendered childNode of comments'DOM(ytd-comments)
+        e.target.tagName === 'YTD-COMMENTS-HEADER-RENDERER' || // this case also depends on the type of page
+        e.target.tagName === 'YTD-COMMENT-ACTION-BUTTONS-RENDERER' // this case also depends on the type of page
+      )
     );
   },
 
@@ -163,6 +175,13 @@ const newYouTube = {
       .addEventListener('click', newYouTube._toggleComments);
   },
 
+  _removeButton() {
+    const button = document.getElementById("toggle-comments")
+    if (!button) return;
+    debugLog('REMOVING BUTTON...');
+    button.remove();
+  },
+
   _toggleComments() {
     const label = document.getElementById('toggle-comments').firstElementChild;
     const comments = document.querySelector("ytd-item-section-renderer.ytd-comments");
@@ -181,7 +200,7 @@ function debugLog(...args) {
   if (IS_DEV_MODE) console.log(...args);
 }
 
-(function() {
+(function init() {
   const youtube = injectorFactory.youtubeInstance();
   debugLog(`DETECTED ${youtube.type()} UI`);
   youtube.registerListeners();
