@@ -150,9 +150,15 @@ const newYouTube = {
     debugLog('ADDING BUTTON...');
     const moreButton = document.getElementById('more');
     const style = moreButton.hidden ? 'style="margin-left:0"' : '';
+    const countOfComments = () => {
+      const node = document.querySelector('yt-formatted-string.count-text')
+      console.log(node.textContent)
+      const count = parseInt(node.textContent, 10);
+      return count
+    };
     const button = `
     <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
-      <span class="fake-yt-formatted-string">${globals.showComments}</span>
+      <span class="fake-yt-formatted-string">${globals.showComments} (${countOfComments()})</span>
     </button>
     `;
 
