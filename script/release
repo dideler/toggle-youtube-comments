@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")/.."
 
-version="v$(grep '"version":' package.json | cut -d\" -f4)"
+version="v$(grep '"version":' manifest.json | cut -d\" -f4)"
 
 git tag $version
 git push --tags
