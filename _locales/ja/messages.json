@@ -1,0 +1,14 @@
+{
+  "extension_name": {
+    "message": "Toggle YouTube Comments"
+  },
+  "extension_desc": {
+    "message": "Hides YouTube comments by default"
+  },
+  "showCommentsText": {
+    "message": "コメントを見る"
+  },
+  "hideCommentsText": {
+    "message": "コメントを閉じる"
+  }
+}
