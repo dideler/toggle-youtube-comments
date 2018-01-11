@@ -112,7 +112,10 @@ const newYouTube = {
   },
 
   registerListeners() {
-    document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject on info panel render.
+    document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject the button on info panel render.
+    document.addEventListener('yt-visibility-refresh', newYouTube._waitCommentsCount); // comments count @1st time: visited video page when the first time.
+    document.addEventListener('yt-page-data-updated', newYouTube._waitCommentsCount); // comments count @2nd time: when jumped from others video page (page jump detection).
+    document.addEventListener('yt-page-data-updated', () => { newYouTube.rewriteCommentsCount('counting') }); // when page jump, temp rewrite the comments count.
   },
 
   inject(e) {
@@ -137,7 +140,7 @@ const newYouTube = {
     return (
       typeof e !== 'undefined' &&
       e.type === 'yt-visibility-refresh' &&
-      e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(ytd-comments)
+      e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(<ytd-comments>)
     );
   },
 
@@ -150,15 +153,14 @@ const newYouTube = {
     debugLog('ADDING BUTTON...');
     const moreButton = document.getElementById('more');
     const style = moreButton.hidden ? 'style="margin-left:0"' : '';
-    const countOfComments = () => {
-      const node = document.querySelector('yt-formatted-string.count-text')
-      console.log(node.textContent)
-      const count = parseInt(node.textContent, 10);
-      return count
-    };
     const button = `
     <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
-      <span class="fake-yt-formatted-string">${globals.showComments} (${countOfComments()})</span>
+      <div class="fake-yt-formatted-string">
+        <span id="toggle-comments-label">${globals.showComments}</span>
+        <span id="comments-count-label">
+          (<span id="comments-count">...</span>)
+        </span>
+      </div>
     </button>
     `;
 
@@ -170,14 +172,81 @@ const newYouTube = {
   },
 
   _toggleComments() {
-    const label = document.getElementById('toggle-comments').firstElementChild;
+    const buttonLabel = document.getElementById('toggle-comments-label');
+    const countLabel = document.getElementById('comments-count-label');
     const comments = document.querySelector("ytd-item-section-renderer.ytd-comments");
 
+    countLabel.classList.toggle('is-hide'); // toggle commentsCount.
+
     if (comments.classList.toggle('hide-comments')) {
-      label.textContent = globals.showComments;
+      buttonLabel.textContent = globals.showComments;
     } else {
-      label.textContent = globals.hideComments;
+      buttonLabel.textContent = globals.hideComments;
     }
+  },
+
+  rewriteCommentsCount(condition) {
+    debugLog('REWRITING COMMENTS COUNT...');
+    const label = document.getElementById('comments-count');
+    if (!label) return;
+    (condition === 'counting') ? label.textContent = '...'
+                               : label.textContent = newYouTube._fetchCommentsCount();
+  },
+  
+  _waitCommentsCount(e) {
+    // debugLog('EVENT?', e)
+    const observeTarget = document.querySelector('ytd-item-section-renderer');
+    
+    function _readyObserve(e) {
+      return(
+        /**
+         * Await rendered the node `<ytd-item-section-renderer>`
+         * tip: This node is childNode of comments'DOM(<ytd-comments>)
+         */
+        !!observeTarget || // For @2nd time = event name => `yt-page-data-updated`
+        newYouTube._ready(e) // For @1st time = event name => `yt-visibility-refresh`
+      )
+    };
+    if (!_readyObserve(e)) return;
+
+    document.removeEventListener('yt-visibility-refresh', newYouTube._waitCommentsCount);
+
+    const commentsPanelObserver = (()=> {
+      debugLog('OBSERVING COMMENTS COUNT...');
+      
+      const target = observeTarget;
+      const observerConfig = { childList: true, subtree: true };
+      const observer = new MutationObserver( mutations => {
+        mutations.forEach( mutation => {
+          // debugLog(mutation)
+          if (
+            /**
+             * Detect render of fetch target node.
+             * 1st expressions is for when the parse target node mutation didn't occur. The occurrence condition is when navigating to other video page with the same number of comments.
+             */
+            mutation.target.id === 'header' &&
+            mutation.target.classList.contains('ytd-item-section-renderer') ||
+            mutation.target.tagName === 'YT-FORMATTED-STRING' &&
+            mutation.target.classList.contains('count-text')
+          ) {
+            // debugLog(mutation);
+            observer.disconnect();
+            debugLog('OBSERVED COMMENTS COUNT...');
+            newYouTube.rewriteCommentsCount();
+          }
+        });
+      });
+      
+      observer.observe(target, observerConfig);
+    })();
+  },
+
+  _fetchCommentsCount() {
+    debugLog('FETCH COMMENTS COUNT...');
+    const targetNode = document.querySelector('yt-formatted-string.count-text');
+    const extractDigitArray = targetNode.textContent.match(/\d+/g);
+    const countString = extractDigitArray.join();
+    return countString;
   },
 };
 
