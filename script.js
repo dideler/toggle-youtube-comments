@@ -113,8 +113,8 @@ const newYouTube = {
 
   registerListeners() {
     document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject the button on info panel render.
-    document.addEventListener('yt-page-data-updated', newYouTube._waitCommentsCount); // Asynchronously get comments count when navigated to video page
-    document.addEventListener('yt-page-data-updated', () => { newYouTube.rewriteCommentsCount('counting') }); // when page navigating, temp rewrite the comments count.
+    document.addEventListener('yt-page-data-updated', newYouTube.injectCommentsCount); // Asynchronously get comments count when navigated to video page
+    window.addEventListener('focus', newYouTube._waitCommentsCount); // When the YouTube tab is in the background state and navigate to the next movie by auto-play, the node of comments is not updated. So set this event when the user returns to Youtube tab.
   },
 
   inject(e) {
@@ -131,7 +131,8 @@ const newYouTube = {
     return (
       newYouTube.isVideo() &&
       !newYouTube.isLiveVideo() &&
-      newYouTube._isInfoPanelRendered(e)
+      (newYouTube._isInfoPanelRendered(e) ||
+      newYouTube._isPageNavigated(e))
     );
   },
 
@@ -140,6 +141,13 @@ const newYouTube = {
       typeof e !== 'undefined' &&
       e.type === 'yt-visibility-refresh' &&
       e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(<ytd-comments>)
+    );
+  },
+
+  _isPageNavigated(e) {
+    return (
+      typeof e !== 'undefined' &&
+      e.type === 'yt-page-data-updated'
     );
   },
 
@@ -184,30 +192,51 @@ const newYouTube = {
     }
   },
 
-  rewriteCommentsCount(condition) {
-    debugLog('REWRITING COMMENTS COUNT...');
-    const label = document.getElementById('comments-count');
-    if (!label) return;
-    (condition === 'counting') ? label.textContent = '...'
-                               : label.textContent = newYouTube._fetchCommentsCount();
+  injectCommentsCount(e) {
+    if (!newYouTube._ready(e)) return;
+
+    newYouTube._commentsInfo.hasGotCount = false;
+    newYouTube._rewriteCommentsCount('counting');
+    newYouTube._waitCommentsCount()
   },
   
-  _waitCommentsCount() {
-    const observerTarget = document.getElementById('comments'); // `<ytd-comments id="comments" ...>`
+  _commentsInfo: {
+    hasGotCount: false,
+    currentCount: '',
+  },
 
-    if (!observerTarget) return; // Check rendered the observer target node.
+  _rewriteCommentsCount(condition) {
+    const label = document.getElementById('comments-count');
+    if (!label) return;
+    
+    debugLog('REWRITING COMMENTS COUNT...');
+    (condition === 'counting') ? label.textContent = '...'
+                               : label.textContent = newYouTube._commentsInfo.currentCount;
+  },
+
+  _waitCommentsCount() {
+    if (newYouTube._commentsInfo.hasGotCount) return;
     
     debugLog('OBSERVING COMMENTS COUNT...');
 
-    const commentsCountNode = () => document.querySelector('yt-formatted-string.count-text');
+    const observerTarget = document.getElementById('comments'); // `<ytd-comments id="comments" ...>`
     const observerConfig = { childList: true, subtree: true };
     const commentsCountObserver = new MutationObserver( mutations => {
       mutations.some( mutation => {
         // debugLog(mutation)
-        if (commentsCountNode()) {
+        if (
+          /**
+           * Detect render of fetch target node.
+           * 1st expression(id === 'header') is for when the parse target node mutation didn't occur.
+           * This occurrence condition is when navigating to same number of comments video. e.g.(5 comments to 5 comments)
+           */
+          mutation.target.id === 'header'||
+          mutation.target.tagName === 'YT-FORMATTED-STRING' &&
+          mutation.target.classList.contains('count-text')
+        ) {
           commentsCountObserver.disconnect();
           debugLog('OBSERVED COMMENTS COUNT...');
-          newYouTube.rewriteCommentsCount();
+          newYouTube._fetchCommentsCount();
           return true; // the same as "break" in `Array.some()`
         }
       });
@@ -219,9 +248,13 @@ const newYouTube = {
   _fetchCommentsCount() {
     debugLog('FETCH COMMENTS COUNT...');
     const targetNode = document.querySelector('yt-formatted-string.count-text');
+    if (!targetNode) return;
+
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
-    return countString;
+    newYouTube._commentsInfo.hasGotCount = true;
+    newYouTube._commentsInfo.currentCount = countString;
+    newYouTube._rewriteCommentsCount()
   },
 };
 
