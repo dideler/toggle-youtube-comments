@@ -164,9 +164,7 @@ const newYouTube = {
     <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
       <div class="fake-yt-formatted-string">
         <span id="toggle-comments-label">${globals.showComments}</span>
-        <span id="comments-count-label">
-          (<span id="comments-count">...</span>)
-        </span>
+        &nbsp;<span id="comments-count"></span>
       </div>
     </button>
     `;
@@ -180,7 +178,7 @@ const newYouTube = {
 
   _toggleComments() {
     const buttonLabel = document.getElementById('toggle-comments-label');
-    const countLabel = document.getElementById('comments-count-label');
+    const countLabel = document.getElementById('comments-count');
     const comments = document.querySelector("ytd-item-section-renderer.ytd-comments");
 
     countLabel.classList.toggle('is-hide'); // toggle commentsCount.
@@ -210,7 +208,7 @@ const newYouTube = {
     if (!label) return;
     
     debugLog('REWRITING COMMENTS COUNT...');
-    (condition === 'counting') ? label.textContent = '...'
+    (condition === 'counting') ? label.textContent = ''
                                : label.textContent = newYouTube._commentsInfo.currentCount;
   },
 
