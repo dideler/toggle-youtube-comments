@@ -3,6 +3,14 @@ INPATH = .
 TIMESTAMP = $(shell date +%F_%H%M)
 OUTPATH = $(TIMESTAMP)-toggle-youtube-comments.zip
 
+.PHONY: help
+help:
+	@echo "Please use \`make <target>\` where <target> is one of:\n"
+	@echo "  help      Shows this help and exits"
+	@echo "  bundle    Creates a zip of the extension to upload to the Chrome Web Store"
+	@echo "  bump      Changes the version number to the one provided"
+	@echo "  clean     Cleans up all build artifacts"
+
 bundle: $(INPATH)
 	zip -9 -r $(OUTPATH) $(INPATH) -x ".*" "*.md" "*.zip" "Makefile"
 
