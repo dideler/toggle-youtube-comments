@@ -193,12 +193,12 @@ const newYouTube = {
   injectCommentsCount(e) {
     if (!newYouTube._ready(e)) return;
 
-    newYouTube._commentsInfo.hasGotCount = false;
+    newYouTube._commentsState.hasGotCount = false;
     newYouTube._rewriteCommentsCount('counting');
     newYouTube._waitCommentsCount()
   },
   
-  _commentsInfo: {
+  _commentsState: {
     hasGotCount: false,
     currentCount: '',
   },
@@ -209,11 +209,11 @@ const newYouTube = {
     
     debugLog('REWRITING COMMENTS COUNT...');
     (condition === 'counting') ? label.textContent = ''
-                               : label.textContent = newYouTube._commentsInfo.currentCount;
+                               : label.textContent = newYouTube._commentsState.currentCount;
   },
 
   _waitCommentsCount() {
-    if (newYouTube._commentsInfo.hasGotCount) return;
+    if (newYouTube._commentsState.hasGotCount) return;
     
     debugLog('OBSERVING COMMENTS COUNT...');
 
@@ -250,8 +250,8 @@ const newYouTube = {
 
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
-    newYouTube._commentsInfo.hasGotCount = true;
-    newYouTube._commentsInfo.currentCount = countString;
+    newYouTube._commentsState.hasGotCount = true;
+    newYouTube._commentsState.currentCount = countString;
     newYouTube._rewriteCommentsCount()
   },
 };
