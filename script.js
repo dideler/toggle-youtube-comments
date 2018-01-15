@@ -49,6 +49,7 @@ const oldYouTube = {
 
     oldYouTube._addClass();
     oldYouTube._addButton();
+    oldYouTube._waitCommentsPanel();
   },
 
   _ready() {
@@ -65,6 +66,7 @@ const oldYouTube = {
     const button = `
     <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-expander" id="toggle-comments" type="button">
       <span class="yt-uix-button-content">${globals.showComments}</span>
+      &nbsp;<span id="comments-count"></span>
     </button>
     `;
 
@@ -76,7 +78,10 @@ const oldYouTube = {
 
   _toggleComments() {
     const label = document.getElementById('toggle-comments').firstElementChild;
+    const countLabel = document.getElementById('comments-count');
     const comments = document.getElementById('watch-discussion');
+    
+    countLabel.classList.toggle('is-hide'); // toggle commentsCount.
 
     if (comments.classList.toggle('hide-comments')) {
       label.textContent = globals.showComments;
@@ -100,6 +105,38 @@ const oldYouTube = {
         comment.nextElementSibling.classList.remove('hid');
       }
     }
+  },
+
+  _waitCommentsPanel() {
+    debugLog('OBSERVING COMMENTS COUNT...');
+
+    const observerTarget = document.getElementById('watch-discussion');
+    const observerConfig = { childList: true };
+    const commentsPanelObserver = new MutationObserver( mutations => {
+      mutations.some( mutation => {
+        if (mutation.addedNodes.length) {
+          commentsPanelObserver.disconnect();
+          debugLog('OBSERVED COMMENTS PANEL...');
+          oldYouTube._addCommentsCount();
+          return true; // the same as "break" in `Array.some()`
+        }
+      });
+    });
+
+    commentsPanelObserver.observe(observerTarget, observerConfig);
+  },
+
+  _addCommentsCount() {
+    debugLog('FETCH COMMENTS COUNT...');
+    const targetNode = document.getElementsByClassName('comment-section-header-renderer')[0];
+    
+    if (!targetNode) return;
+    const extractDigitArray = targetNode.textContent.match(/\d+/g);
+    const countString = extractDigitArray.join();
+
+    debugLog('ADDING COMMENTS COUNT...');
+    const label = document.getElementById('comments-count');
+    label.textContent = countString;
   },
 };
 
