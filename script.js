@@ -129,8 +129,6 @@ const oldYouTube = {
   _addCommentsCount() {
     debugLog('FETCH COMMENTS COUNT...');
     const targetNode = document.getElementsByClassName('comment-section-header-renderer')[0];
-    
-    if (!targetNode) return;
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
 
@@ -283,8 +281,6 @@ const newYouTube = {
   _fetchCommentsCount() {
     debugLog('FETCH COMMENTS COUNT...');
     const targetNode = document.querySelector('yt-formatted-string.count-text');
-    if (!targetNode) return;
-
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
     newYouTube._commentsState.hasGotCount = true;
