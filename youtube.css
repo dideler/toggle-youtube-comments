@@ -4,6 +4,10 @@
   padding: 0 !important; /* this padding for oldYouTube */
 }
 
+.is-hide {
+  display: none
+}
+
 .fake-paper-button {
   display: inline-block;
   position: relative;
