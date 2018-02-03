@@ -86,3 +86,6 @@ Trusted collaborators can [apply to be added as a publisher](https://github.com/
 
 There's a [Makefile](/Makefile) to help with some of these steps.
 Run `make` in the project's root directory to see the supported commands.
+
+Releases with signficant visual changes should use new images on the Chrome Web Store.  
+Please [upload a copy of the images to GitHub](../../issues/32).
