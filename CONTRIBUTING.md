@@ -53,15 +53,21 @@ project does not have automated acceptance tests yet.
 This ensures that no regressions are introduced.
 
 Many of the scenarios involve checking that the extension is
-injected into the page properly on static and dynamic navigation,
-and that the functionality works. Static navigation is traditional
-navigation on the web, that is, the client sends a web request and
-the server returns content and the whole page is then rendered).
-Dynamic navigation is when a Single Page Application only updates
-certain sections of the page and then re-renders the page.
+injected into the page properly on _static_ and _dynamic_ navigation,
+and that the functionality works.
+
+Static (hard) navigation is traditional navigation on the web.
+The full page is requested by the client and returned by the server.
+
+Dynamic (soft) navigation is when a Single Page Application updates
+certain sections or components of the page to make it look like a
+new page. Such navigation can be done client-side. Even though
+the page path may change, the page was not requested from a server.
+Note that web requests to a server may still occur to fetch content.
 
 Test scenarios:
 
+* Toggle button appears when hard navigating to a video
 * Toggle button appears when navigating from home page to a video
 * Toggle button appears when navigating from a video to a video
 * Toggle button does not appear when viewing a live video with chat
