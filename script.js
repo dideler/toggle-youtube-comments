@@ -1,6 +1,6 @@
 'use strict';
 
-const globals = {
+const l11n = {
   showComments: chrome.i18n.getMessage('showCommentsText'),
   hideComments: chrome.i18n.getMessage('hideCommentsText'),
 };
@@ -65,7 +65,7 @@ const oldYouTube = {
     debugLog('ADDING BUTTON...');
     const button = `
     <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-expander" id="toggle-comments" type="button">
-      <span class="yt-uix-button-content">${globals.showComments}</span>
+      <span class="yt-uix-button-content">${l11n.showComments}</span>
       &nbsp;<span id="comments-count"></span>
     </button>
     `;
@@ -84,9 +84,9 @@ const oldYouTube = {
     countLabel.classList.toggle('is-hide'); // toggle commentsCount.
 
     if (comments.classList.toggle('hide-comments')) {
-      label.textContent = globals.showComments;
+      label.textContent = l11n.showComments;
     } else {
-      label.textContent = globals.hideComments;
+      label.textContent = l11n.hideComments;
     }
 
     oldYouTube._showReadMore();
@@ -197,7 +197,7 @@ const newYouTube = {
     const button = `
     <button class="fake-paper-button" id="toggle-comments" type="button">
       <div class="fake-yt-formatted-string">
-        <span id="toggle-comments-label">${globals.showComments}</span>
+        <span id="toggle-comments-label">${l11n.showComments}</span>
         &nbsp;<span id="comments-count"></span>
       </div>
     </button>
@@ -218,9 +218,9 @@ const newYouTube = {
     countLabel.classList.toggle('is-hide'); // toggle commentsCount.
 
     if (comments.classList.toggle('hide-comments')) {
-      buttonLabel.textContent = globals.showComments;
+      buttonLabel.textContent = l11n.showComments;
     } else {
-      buttonLabel.textContent = globals.hideComments;
+      buttonLabel.textContent = l11n.hideComments;
     }
   },
 
