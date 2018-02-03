@@ -27,6 +27,7 @@
   cursor: pointer;
   z-index: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
   background-color: var(--paper-button_-_background-color);
   border: var(--paper-button_-_border);
   color: var(--paper-button_-_color);
