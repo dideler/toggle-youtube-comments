@@ -2,6 +2,13 @@ Thank you very much for your interest in contributing.
 
 Before you start, please take a moment to read this guide.
 
+# Table of Contents
+
+* [Goals](#goals)
+* [Development](#development)
+* [Test](#test)
+* [Release](#release)
+
 # Goals
 
 Goals help us figure out what to work on, how to design the product,
