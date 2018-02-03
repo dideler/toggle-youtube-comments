@@ -5,7 +5,7 @@
 }
 
 .is-hide {
-  display: none
+  display: none;
 }
 
 .fake-paper-button {
@@ -32,6 +32,11 @@
   color: var(--paper-button_-_color);
   width: var(--paper-button_-_width);
   text-transform: var(--paper-button_-_text-transform, uppercase);
+}
+
+/* Behavior when there is no "SHOW MORE/LESS" button */
+#less[hidden] + #more[hidden] + .fake-paper-button {
+  margin-left: 0;
 }
 
 .fake-yt-formatted-string {

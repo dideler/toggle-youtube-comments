@@ -194,9 +194,8 @@ const newYouTube = {
   _addButton() {
     debugLog('ADDING BUTTON...');
     const moreButton = document.getElementById('more');
-    const style = moreButton.hidden ? 'style="margin-left:0"' : '';
     const button = `
-    <button class="fake-paper-button" id="toggle-comments" ${style} type="button">
+    <button class="fake-paper-button" id="toggle-comments" type="button">
       <div class="fake-yt-formatted-string">
         <span id="toggle-comments-label">${globals.showComments}</span>
         &nbsp;<span id="comments-count"></span>
