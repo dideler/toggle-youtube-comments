@@ -59,3 +59,17 @@ Test scenarios:
 * Toggle button appears when navigating from a video to a video
 * Toggle button does not appear when viewing a live video with chat
 
+# Release
+
+**Disclaimer:** _This section is solely for publishers of this extension on the Google Chrome Store.
+Trusted collaborators can [apply to be added as a publisher](https://github.com/dideler/toggle-youtube-comments/issues/26#issuecomment-359970408)._
+
+1. Bump version in a separate commit (use [semantic versioning](https://semver.org/))
+1. Create git tag at version bump
+1. Push version bump and tag
+1. Create [release notes](../../releases)
+1. Bundle the extension into a zip archive
+1. Upload the bundle to the Chrome Web Store via the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
+
+There's a [Makefile](/Makefile) to help with some of these steps.
+Run `make` in the project's root directory to see the supported commands.
