@@ -31,4 +31,4 @@ test:
 	@echo Not yet supported
 
 clean:
-	rm *.zip
+	-rm *.zip
