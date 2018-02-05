@@ -148,7 +148,15 @@ const newYouTube = {
 
   registerListeners() {
     document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject the button on info panel render.
-    document.addEventListener('yt-page-data-updated', newYouTube.injectCommentsCount); // Asynchronously get comments count when navigated to video page
+
+    // Asynchronously get comments count when navigated to video page.
+    document.addEventListener('yt-page-data-updated', function(e) {
+      // setTimeout mean: This event sometimes precedes rewriting of number of comment node. So wait few ms.
+      setTimeout(() => {
+        newYouTube.injectCommentsCount(e)
+      }, 500)
+    });
+
     window.addEventListener('focus', newYouTube._waitCommentsCount); // When the YouTube tab is in the background state and navigate to the next movie by auto-play, the node of comments is not updated. So set this event when the user returns to Youtube tab.
   },
 
@@ -175,7 +183,10 @@ const newYouTube = {
     return (
       typeof e !== 'undefined' &&
       e.type === 'yt-visibility-refresh' &&
-      e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(<ytd-comments>)
+      (
+        e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' || // this mean: rendered childNode of comments'DOM(<ytd-comments>)
+        e.target.tagName === 'YTD-COMMENT-ACTION-BUTTONS-RENDERER' // this case: video type with heart action to user comments by creator.
+      )
     );
   },
 
@@ -239,7 +250,7 @@ const newYouTube = {
 
   _rewriteCommentsCount(condition) {
     const label = document.getElementById('comments-count');
-    if (!label) return;
+    if (!label) return false;
     
     debugLog('REWRITING COMMENTS COUNT...');
     (condition === 'counting') ? label.textContent = ''
@@ -256,16 +267,7 @@ const newYouTube = {
     const commentsCountObserver = new MutationObserver( mutations => {
       mutations.some( mutation => {
         // debugLog(mutation)
-        if (
-          /**
-           * Detect render of fetch target node.
-           * 1st expression(id === 'header') is for when the parse target node mutation didn't occur.
-           * This occurrence condition is when navigating to same number of comments video. e.g.(5 comments to 5 comments)
-           */
-          mutation.target.id === 'header'||
-          mutation.target.tagName === 'YT-FORMATTED-STRING' &&
-          mutation.target.classList.contains('count-text')
-        ) {
+        if (document.querySelector('#count .count-text')) {
           commentsCountObserver.disconnect();
           debugLog('OBSERVED COMMENTS COUNT...');
           newYouTube._fetchCommentsCount();
@@ -284,7 +286,14 @@ const newYouTube = {
     const countString = extractDigitArray.join();
     newYouTube._commentsState.hasGotCount = true;
     newYouTube._commentsState.currentCount = countString;
-    newYouTube._rewriteCommentsCount()
+    
+    const tryRewrite = setInterval(() => {
+      if (newYouTube._rewriteCommentsCount() === false) {
+        newYouTube._rewriteCommentsCount();
+      } else {
+        clearInterval(tryRewrite);
+      }
+    }, 100);
   },
 };
 
