@@ -2,6 +2,7 @@ SHELL = /bin/sh
 INPATH = .
 TIMESTAMP = $(shell date +%F_%H%M)
 OUTPATH = $(TIMESTAMP)-toggle-youtube-comments.zip
+MINIFY_DIR = _build/
 
 .PHONY: help
 help:
@@ -11,8 +12,16 @@ help:
 	@echo "  bump      Changes the version number to the one provided"
 	@echo "  clean     Cleans up all build artifacts"
 
-bundle: $(INPATH)
-	zip -9 -r $(OUTPATH) $(INPATH) -x ".*" "*.md" "*.zip" "Makefile"
+compress: $(INPATH) | $(MINIFY_DIR)
+	minify --recursive $(INPATH) --output $(MINIFY_DIR)
+	cp -r LICENSE icons $(MINIFY_DIR)
+
+$(MINIFY_DIR):
+	mkdir $(MINIFY_DIR)
+
+bundle: compress
+bundle: $(MINIFY_DIR)
+	zip -9 -r $(OUTPATH) $(MINIFY_DIR)
 
 bump: prev_version = $(shell grep '"version":' manifest.json | cut -d\" -f4)
 bump: search = ("version":[[:space:]]*").+(")
@@ -31,4 +40,4 @@ test:
 	@echo Not yet supported
 
 clean:
-	-rm *.zip
+	-rm -r *.zip $(MINIFY_DIR)
