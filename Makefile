@@ -3,6 +3,7 @@ INPATH = .
 TIMESTAMP = $(shell date +%F_%H%M)
 OUTPATH = $(TIMESTAMP)-toggle-youtube-comments.zip
 MINIFY_DIR = _build/
+MINIFY := $(shell command -v minify 2> /dev/null)
 
 .PHONY: help
 help:
@@ -13,8 +14,12 @@ help:
 	@echo "  clean     Cleans up all build artifacts"
 
 compress: $(INPATH) | $(MINIFY_DIR)
+ifneq ($(MINIFY),)
 	minify --recursive $(INPATH) --output $(MINIFY_DIR)
 	cp -r LICENSE icons $(MINIFY_DIR)
+else
+	$(error "minify is not available, please install from https://github.com/tdewolff/minify/tree/master/cmd/minify")
+endif
 
 $(MINIFY_DIR):
 	mkdir $(MINIFY_DIR)
