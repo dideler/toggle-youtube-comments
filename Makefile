@@ -3,7 +3,8 @@ INPATH = .
 TIMESTAMP = $(shell date +%F_%H%M)
 OUTPATH = $(TIMESTAMP)-toggle-youtube-comments.zip
 
-.PHONY: help
+.PHONY: help bundle bump release test clean
+
 help:
 	@echo "Please use \`make <target>\` where <target> is one of:\n"
 	@echo "  help      Shows this help and exits"
