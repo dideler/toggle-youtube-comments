@@ -162,6 +162,8 @@ const newYouTube = {
 
   inject(e) {
     debugLog('ATTEMPTING TO INJECT...');
+    console.log(e);
+    
     if (!newYouTube._ready(e)) return;
 
     newYouTube._addClass();
@@ -185,7 +187,7 @@ const newYouTube = {
       e.type === 'yt-visibility-refresh' &&
       (
         e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' || // this mean: rendered childNode of comments'DOM(<ytd-comments>)
-        e.target.tagName === 'YTD-COMMENT-ACTION-BUTTONS-RENDERER' // this case: video type with heart action to user comments by creator.
+        e.target.tagName === 'YTD-CREATOR-HEART-RENDERER' // this case: video type with heart action to user comments by creator.
       )
     );
   },
