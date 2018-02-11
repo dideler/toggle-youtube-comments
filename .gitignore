@@ -1,3 +1,8 @@
 *.zip
 .DS_Store
 .vscode
+*.log
+npm-debug.log*
+node_modules/
+_dist/
+_packages/
