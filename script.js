@@ -147,7 +147,7 @@ const newYouTube = {
   },
 
   registerListeners() {
-    document.addEventListener('yt-visibility-refresh', newYouTube.inject); // Inject the button on info panel render.
+    document.addEventListener('yt-register-action', newYouTube.inject); // Inject the button on comments render.
     document.addEventListener('yt-page-data-updated', newYouTube.injectCommentsCount); // Asynchronously get comments count when navigated to video page
     window.addEventListener('focus', newYouTube._waitCommentsCount); // When the YouTube tab is in the background state and navigate to the next movie by auto-play, the node of comments is not updated. So set this event when the user returns to Youtube tab.
   },
@@ -159,23 +159,23 @@ const newYouTube = {
     newYouTube._addClass();
     newYouTube._addButton();
 
-    document.removeEventListener('yt-visibility-refresh', newYouTube.inject);
+    document.removeEventListener('yt-register-action', newYouTube.inject);
   },
 
   _ready(e) {
     return (
       newYouTube.isVideo() &&
       !newYouTube.isLiveVideo() &&
-      (newYouTube._isInfoPanelRendered(e) ||
+      (newYouTube._isCommentsRendered(e) ||
       newYouTube._isPageNavigated(e))
     );
   },
 
-  _isInfoPanelRendered(e) {
+  _isCommentsRendered(e) {
     return (
       typeof e !== 'undefined' &&
-      e.type === 'yt-visibility-refresh' &&
-      e.target.tagName === 'YTD-ITEM-SECTION-RENDERER' // this mean: rendered childNode of comments'DOM(<ytd-comments>)
+      e.type === 'yt-register-action' &&
+      e.target.tagName === 'YTD-COMMENTS'
     );
   },
 
