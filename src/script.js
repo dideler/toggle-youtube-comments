@@ -39,8 +39,10 @@ const oldYouTube = {
     return 'OLD';
   },
 
+  events: { NAVIGATION_DONE: 'spfdone' },
+
   registerListeners() {
-    document.addEventListener('spfdone', oldYouTube.inject); // Inject on dynamic navigation (subsequent page loads)
+    document.addEventListener(oldYouTube.events.NAVIGATION_DONE, oldYouTube.inject);
   },
 
   inject() {
@@ -49,7 +51,7 @@ const oldYouTube = {
 
     oldYouTube._addClass();
     oldYouTube._addButton();
-    oldYouTube._waitCommentsPanel();
+    oldYouTube._addCommentCountOnLoad();
   },
 
   _ready() {
@@ -71,22 +73,20 @@ const oldYouTube = {
     `;
 
     document.getElementById('action-panel-details').innerHTML += button;
-    document
-      .getElementById('toggle-comments')
-      .addEventListener('click', oldYouTube._toggleComments);
+    document.getElementById('toggle-comments').onclick = oldYouTube._toggleComments;
   },
 
   _toggleComments() {
-    const label = document.getElementById('toggle-comments').firstElementChild;
-    const countLabel = document.getElementById('comments-count');
     const comments = document.getElementById('watch-discussion');
+    const buttonLabel = document.getElementById('toggle-comments').firstElementChild;
+    const countLabel = document.getElementById('comments-count');
 
-    countLabel.classList.toggle('is-hide'); // toggle commentsCount.
+    countLabel.classList.toggle('hide-count');
 
     if (comments.classList.toggle('hide-comments')) {
-      label.textContent = l11n.showComments;
+      buttonLabel.textContent = l11n.showComments;
     } else {
-      label.textContent = l11n.hideComments;
+      buttonLabel.textContent = l11n.hideComments;
     }
 
     oldYouTube._showReadMore();
@@ -107,36 +107,37 @@ const oldYouTube = {
     }
   },
 
-  _waitCommentsPanel() {
-    console.log('OBSERVING COMMENTS COUNT...');
+  _addCommentCountOnLoad() {
+    console.log('OBSERVING COMMENTS PANEL...');
 
+    const handleCommentsLoaded = mutations => {
+      if (mutations.some(commentsLoaded)) {
+        commentsPanelObserver.disconnect();
+        oldYouTube._addCommentCount();
+      }
+    };
+
+    const commentsLoaded = mutation => {
+      return mutation.addedNodes.length !== 0;
+    };
+
+    const commentsPanelObserver = new MutationObserver(handleCommentsLoaded);
     const observerTarget = document.getElementById('watch-discussion');
     const observerConfig = { childList: true };
-    const commentsPanelObserver = new MutationObserver(mutations => {
-      mutations.some(mutation => {
-        if (mutation.addedNodes.length) {
-          commentsPanelObserver.disconnect();
-          console.log('OBSERVED COMMENTS PANEL...');
-          oldYouTube._addCommentsCount();
-          return true; // the same as "break" in `Array.some()`
-        }
-      });
-    });
 
     commentsPanelObserver.observe(observerTarget, observerConfig);
   },
 
-  _addCommentsCount() {
-    console.log('FETCH COMMENTS COUNT...');
-    const targetNode = document.getElementsByClassName(
+  _addCommentCount() {
+    console.log('ADDING COMMENTS COUNT...');
+
+    const commentsHeader = document.getElementsByClassName(
       'comment-section-header-renderer'
     )[0];
-    const extractDigitArray = targetNode.textContent.match(/\d+/g);
-    const countString = extractDigitArray.join();
+    const digits_regex = /\d+/g;
+    const commentCount = commentsHeader.textContent.match(digits_regex).join();
 
-    console.log('ADDING COMMENTS COUNT...');
-    const label = document.getElementById('comments-count');
-    label.textContent = countString;
+    document.getElementById('comments-count').textContent = commentCount;
   },
 };
 
@@ -237,7 +238,7 @@ const newYouTube = {
       'ytd-item-section-renderer.ytd-comments'
     );
 
-    countLabel.classList.toggle('is-hide'); // toggle commentsCount.
+    countLabel.classList.toggle('hide-count');
 
     if (comments.classList.toggle('hide-comments')) {
       buttonLabel.textContent = l11n.showComments;
