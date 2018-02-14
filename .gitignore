@@ -4,5 +4,8 @@
 *.log
 npm-debug.log*
 node_modules/
-_dist/
-_packages/
+
+# Management of empty directory.
+_dist/*
+_packages/*
+!.gitkeep
