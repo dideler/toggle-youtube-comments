@@ -1,0 +1,37 @@
+{
+  "name": "toggle-youtube-comments",
+  "version": "2.5.2",
+  "description": "Hides YouTube comments by default",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "shx rm -rf ./_packages/* ./_dist/*",
+    "compress": "node tasks/compress.js",
+    "copy": "node tasks/copy.js",
+    "build": "run-s clean && run-p compress copy",
+    "pack": "node tasks/pack.js",
+    "bump": "echo bump",
+    "release": "echo \"Error: no release specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dideler/toggle-youtube-comments.git"
+  },
+  "author": "Dennis Ideler",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dideler/toggle-youtube-comments/issues"
+  },
+  "homepage": "https://github.com/dideler/toggle-youtube-comments#readme",
+  "devDependencies": {
+    "archiver": "^2.1.1",
+    "clean-css-cli": "^4.1.10",
+    "imagemin": "^5.3.1",
+    "imagemin-pngquant": "^5.0.1",
+    "moment": "^2.20.1",
+    "npm-run-all": "^4.1.2",
+    "shelljs": "^0.8.1",
+    "shx": "^0.2.2",
+    "uglify-es": "^3.3.10"
+  }
+}
