@@ -5,7 +5,7 @@
   "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "shx rm -rf ./_packages/* ./_dist/*",
+    "clean": "shx rm -rf ./_dist/*",
     "compress": "node tasks/compress.js",
     "copy": "node tasks/copy.js",
     "build": "run-s clean && run-p compress copy",
