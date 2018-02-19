@@ -18,6 +18,9 @@
     "url": "git+https://github.com/dideler/toggle-youtube-comments.git"
   },
   "author": "Dennis Ideler",
+  "contributors": [
+    "1natsu172 (https://twitter.com/1natsu172)"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dideler/toggle-youtube-comments/issues"
