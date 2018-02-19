@@ -2,14 +2,13 @@
   "name": "toggle-youtube-comments",
   "version": "2.5.2",
   "description": "Hides YouTube comments by default",
-  "main": "script.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "shx rm -rf ./_dist/*",
     "compress": "node tasks/compress.js",
     "copy": "node tasks/copy.js",
-    "build": "run-s clean && run-p compress copy",
     "pack": "node tasks/pack.js",
+    "build": "run-s clean compress copy pack",
     "bump": "echo bump",
     "release": "echo \"Error: no release specified\" && exit 1"
   },
