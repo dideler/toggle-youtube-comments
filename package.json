@@ -6,9 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "shx rm -rf ./_dist/*",
     "compress": "node tasks/compress.js",
-    "copy": "node tasks/copy.js",
     "pack": "node tasks/pack.js",
-    "build": "run-s clean compress copy pack",
+    "build": "run-s clean compress pack",
     "bump": "echo bump",
     "release": "echo \"Error: no release specified\" && exit 1"
   },
@@ -27,8 +26,11 @@
   "homepage": "https://github.com/dideler/toggle-youtube-comments#readme",
   "devDependencies": {
     "clean-css-cli": "^4.1.10",
+    "globby": "^8.0.1",
     "imagemin": "^5.3.1",
     "imagemin-pngquant": "^5.0.1",
+    "jsonfile": "^4.0.0",
+    "make-dir": "^1.2.0",
     "moment": "^2.20.1",
     "npm-run-all": "^4.1.2",
     "shelljs": "^0.8.1",
