@@ -77,15 +77,15 @@ Test scenarios:
 **Disclaimer:** _This section is solely for publishers of this extension on the Google Chrome Store.
 Trusted collaborators can [apply to be added as a publisher](https://github.com/dideler/toggle-youtube-comments/issues/26#issuecomment-359970408)._
 
-1. Bump version in a separate commit (use [semantic versioning](https://semver.org/))
-1. Create git tag at version bump
-1. Push version bump and tag
-1. Create [release notes](../../releases)
-1. Bundle the extension into a zip archive
-1. Upload the bundle to the Chrome Web Store via the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
+1. Install/update build dependencies with `npm install`
+1. Bump version in `manifest.json` and `package.json` then commit (use [semantic versioning](https://semver.org/))
+1. Create a tag at the version bump, e.g. `git tag v3.0.0`
+1. Push version bump and tag, e.g. `git push && git push --tags`
+1. Create [release notes](../../releases) and [include code changes with a tag comparison](https://github.com/dideler/toggle-youtube-comments/issues/27#issuecomment-360982010)
+1. Build the extension package with `npm run build`
+1. Upload the zipped package to the Chrome Web Store via the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
 
-There's a [Makefile](/Makefile) to help with some of these steps.
-Run `make` in the project's root directory to see the supported commands.
+You can view all scripts with `npm run`.
 
 Releases with signficant visual changes should use new images on the Chrome Web Store.  
 Please [upload a copy of the images to GitHub](../../issues/32).
