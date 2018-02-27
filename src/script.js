@@ -44,7 +44,7 @@ const oldYouTube = {
   },
 
   inject() {
-    debugLog('ATTEMPTING TO INJECT...');
+    console.log('ATTEMPTING TO INJECT...');
     if (!oldYouTube._ready()) return;
 
     oldYouTube._addClass();
@@ -57,12 +57,12 @@ const oldYouTube = {
   },
 
   _addClass() {
-    debugLog('ADDING CLASS...');
+    console.log('ADDING CLASS...');
     document.getElementById('watch-discussion').classList.add('hide-comments');
   },
 
   _addButton() {
-    debugLog('ADDING BUTTON...');
+    console.log('ADDING BUTTON...');
     const button = `
     <button class="yt-uix-button yt-uix-button-size-default yt-uix-button-expander" id="toggle-comments" type="button">
       <span class="yt-uix-button-content">${l11n.showComments}</span>
@@ -108,7 +108,7 @@ const oldYouTube = {
   },
 
   _waitCommentsPanel() {
-    debugLog('OBSERVING COMMENTS COUNT...');
+    console.log('OBSERVING COMMENTS COUNT...');
 
     const observerTarget = document.getElementById('watch-discussion');
     const observerConfig = { childList: true };
@@ -116,7 +116,7 @@ const oldYouTube = {
       mutations.some( mutation => {
         if (mutation.addedNodes.length) {
           commentsPanelObserver.disconnect();
-          debugLog('OBSERVED COMMENTS PANEL...');
+          console.log('OBSERVED COMMENTS PANEL...');
           oldYouTube._addCommentsCount();
           return true; // the same as "break" in `Array.some()`
         }
@@ -127,12 +127,12 @@ const oldYouTube = {
   },
 
   _addCommentsCount() {
-    debugLog('FETCH COMMENTS COUNT...');
+    console.log('FETCH COMMENTS COUNT...');
     const targetNode = document.getElementsByClassName('comment-section-header-renderer')[0];
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
 
-    debugLog('ADDING COMMENTS COUNT...');
+    console.log('ADDING COMMENTS COUNT...');
     const label = document.getElementById('comments-count');
     label.textContent = countString;
   },
@@ -153,7 +153,7 @@ const newYouTube = {
   },
 
   inject(e) {
-    debugLog('ATTEMPTING TO INJECT...');
+    console.log('ATTEMPTING TO INJECT...');
     if (!newYouTube._ready(e)) return;
 
     newYouTube._addClass();
@@ -187,12 +187,12 @@ const newYouTube = {
   },
 
   _addClass() {
-    debugLog('ADDING CLASS...');
+    console.log('ADDING CLASS...');
     document.querySelector('ytd-item-section-renderer.ytd-comments').classList.add('hide-comments');
   },
 
   _addButton() {
-    debugLog('ADDING BUTTON...');
+    console.log('ADDING BUTTON...');
     const moreButton = document.getElementById('more');
     const button = `
     <button class="fake-paper-button" id="toggle-comments" type="button">
@@ -241,7 +241,7 @@ const newYouTube = {
     const label = document.getElementById('comments-count');
     if (!label) return;
     
-    debugLog('REWRITING COMMENTS COUNT...');
+    console.log('REWRITING COMMENTS COUNT...');
     (condition === 'counting') ? label.textContent = ''
                                : label.textContent = newYouTube._commentsState.currentCount;
   },
@@ -249,13 +249,13 @@ const newYouTube = {
   _waitCommentsCount() {
     if (newYouTube._commentsState.hasGotCount) return;
     
-    debugLog('OBSERVING COMMENTS COUNT...');
+    console.log('OBSERVING COMMENTS COUNT...');
 
     const observerTarget = document.getElementById('comments'); // `<ytd-comments id="comments" ...>`
     const observerConfig = { childList: true, subtree: true };
     const commentsCountObserver = new MutationObserver( mutations => {
       mutations.some( mutation => {
-        // debugLog(mutation)
+        // console.log(mutation)
         if (
           /**
            * Detect render of fetch target node.
@@ -267,7 +267,7 @@ const newYouTube = {
           mutation.target.classList.contains('count-text')
         ) {
           commentsCountObserver.disconnect();
-          debugLog('OBSERVED COMMENTS COUNT...');
+          console.log('OBSERVED COMMENTS COUNT...');
           newYouTube._fetchCommentsCount();
           return true; // the same as "break" in `Array.some()`
         }
@@ -278,7 +278,7 @@ const newYouTube = {
   },
 
   _fetchCommentsCount() {
-    debugLog('FETCH COMMENTS COUNT...');
+    console.log('FETCH COMMENTS COUNT...');
     const targetNode = document.querySelector('yt-formatted-string.count-text');
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
@@ -288,15 +288,9 @@ const newYouTube = {
   },
 };
 
-const IS_DEV_MODE = !('update_url' in chrome.runtime.getManifest()); // Chrome Web Store adds update_url attribute.
-
-function debugLog(...args) {
-  if (IS_DEV_MODE) console.log(...args);
-}
-
 (function() {
   const youtube = injectorFactory.youtubeInstance();
-  debugLog(`DETECTED ${youtube.type()} UI`);
+  console.log(`DETECTED ${youtube.type()} UI`);
   youtube.registerListeners();
   youtube.inject();
 })();

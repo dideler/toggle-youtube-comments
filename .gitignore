@@ -1,3 +1,11 @@
 *.zip
 .DS_Store
 .vscode
+*.log
+npm-debug.log*
+node_modules/
+
+# Management of empty directory.
+_dist/*
+_packages/*
+!.gitkeep
