@@ -9,6 +9,6 @@
 
 ## Team
 
-[![Dennis Ideler](https://github.com/dideler.png?size=150)](https://github.com/dideler) | [![1natsu172](https://github.com/1natsu172.png?size=150)](https://github.com/1natsu172)
-:---:|:---:|:---:
-[Dennis Ideler](http://dennisideler.com) | [1natsu172](https://twitter.com/1natsu172)
+| [![Dennis Ideler](https://github.com/dideler.png?size=150)](https://github.com/dideler) | [![1natsu172](https://github.com/1natsu172.png?size=150)](https://github.com/1natsu172) |
+| :---: | :---: |
+| [Dennis Ideler](http://dennisideler.com) | [1natsu172](https://twitter.com/1natsu172) |
