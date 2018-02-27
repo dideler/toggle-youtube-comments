@@ -59,12 +59,12 @@ const compressImage = () => {
  * Compress JSON on node.js
  */
 const compressJson = async () => {
-  const srcPathsArray = await fastGlob('src/**/*.json');
+  const srcPaths = await fastGlob('src/**/*.json');
 
-  const distPathsArray = await Promise.all(
-    srcPathsArray.map(async v => {
-      const distPath = v.replace('src/', '_dist/');
-      await makeDir(path.dirname(distPath)); // make parent directory of file.
+  const distPaths = await Promise.all(
+    srcPaths.map(srcPath => {
+      const distPath = srcPath.replace('src/', '_dist/');
+      shell.mkdir('-p', path.dirname(distPath));
       return path.resolve(distPath); // return absolute path.
     })
   );
@@ -90,9 +90,9 @@ const compressJson = async () => {
     ).then(log => console.log('JSON optimised'));
   };
 
-  const jsonContents = await readFiles(srcPathsArray);
+  const jsonContents = await readFiles(srcPaths);
 
-  const write = await writeFiles(distPathsArray, jsonContents);
+  const write = await writeFiles(distPaths, jsonContents);
 };
 
 /**
