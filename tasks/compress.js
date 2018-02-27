@@ -2,7 +2,7 @@ const util = require('util');
 const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
-const globby = require('globby');
+const fastGlob = require('fast-glob');
 const makeDir = require('make-dir');
 const uglifyES = require('uglify-es');
 const imagemin = require('imagemin');
@@ -56,7 +56,7 @@ const compressImage = () => {
  * Compress JSON on node.js
  */
 const compressJson = async () => {
-  const srcPathsArray = await globby('src/**/*.json');
+  const srcPathsArray = await fastGlob('src/**/*.json');
 
   const distPathsArray = await Promise.all(
     srcPathsArray.map(async v => {
