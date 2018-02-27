@@ -56,10 +56,7 @@ const compressImage = () => {
  * Compress JSON on node.js
  */
 const compressJson = async () => {
-  const srcPathsArray = await Promise.all([
-    globby('src/_locales/**/messages.json'),
-    globby('src/manifest.json'),
-  ]).then(arrays => [].concat(...arrays)); // flatten array
+  const srcPathsArray = await globby('src/**/*.json');
 
   const distPathsArray = await Promise.all(
     srcPathsArray.map(async v => {
