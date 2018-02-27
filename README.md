@@ -1,4 +1,4 @@
-|<h2>[Toggle YouTube Comments][store]</h2><br>[![](icons/128.png)][store]|
+|<h2>[Toggle YouTube Comments][store]</h2><br>[![](src/icons/128.png)][store]|
 |:---:|
 |Collapses YouTube comments by default.|
 |_<sup>Icon by [Gregor Cresnar]. Licensed under [CC BY 3.0].</sup>_|
