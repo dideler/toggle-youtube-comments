@@ -13,7 +13,9 @@ const jsonfile = require('jsonfile');
  * Using clean-css-cli directly.
  */
 const compressCss = () =>
-  shell.exec('cleancss -O1 ./src/youtube.css -o ./_dist/youtube.css');
+  shell.exec('cleancss -O1 ./src/youtube.css -o ./_dist/youtube.css', code => {
+    if (code === 0) console.log('CSS optimised');
+  });
 
 /**
  * Using Uglify-ES on node.js
@@ -31,8 +33,9 @@ const compressJs = () => {
 
   const result = uglifyES.minify(src, options);
 
-  // Output compressed file.
-  fs.writeFileSync(dist, result.code);
+  fs.writeFile(dist, result.code, err => {
+    if (!err) console.log('JS optimised');
+  });
 };
 
 /**
@@ -48,7 +51,7 @@ const compressImage = () => {
       }),
     ],
   }).then(files => {
-    console.log('Images optimized');
+    console.log('Images optimised');
   });
 };
 
@@ -84,7 +87,7 @@ const compressJson = async () => {
           spaces: 0,
         });
       })
-    ).then(log => console.log('JSON compressed'));
+    ).then(log => console.log('JSON optimised'));
   };
 
   const jsonContents = await readFiles(srcPathsArray);
