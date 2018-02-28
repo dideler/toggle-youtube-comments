@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const shell = require('shelljs');
 const fastGlob = require('fast-glob');
-const makeDir = require('make-dir');
 const uglifyES = require('uglify-es');
 const imagemin = require('imagemin');
 const imageminPngquant = require('imagemin-pngquant');
