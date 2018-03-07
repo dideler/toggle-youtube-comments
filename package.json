@@ -8,7 +8,7 @@
     "compress": "node tasks/compress.js",
     "pack": "node tasks/pack.js",
     "build": "run-s clean compress pack",
-    "version": "node tasks/bump-manifest.js",
+    "version": "node tasks/bump-manifest.js && git add src/manifest.json",
     "release": "echo \"Error: no release specified\" && exit 1"
   },
   "repository": {
