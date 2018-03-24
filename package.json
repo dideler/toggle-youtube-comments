@@ -23,6 +23,7 @@
   "homepage": "https://github.com/dideler/toggle-youtube-comments#readme",
   "devDependencies": {
     "clean-css-cli": "^4.1.10",
+    "clipboardy": "^1.2.3",
     "fast-glob": "^2.1.0",
     "imagemin": "^5.3.1",
     "imagemin-pngquant": "^5.0.1",
