@@ -10,7 +10,7 @@
     "build": "run-s clean compress pack",
     "preversion": "git pull --tags",
     "version": "node tasks/bump-manifest.js && git add src/manifest.json",
-    "postversion": "git push && git push --tags",
+    "postversion": "node tasks/annotate-tag.js && git push && git push --tags",
     "release": "echo \"Error: no release specified\" && exit 1"
   },
   "repository": {
