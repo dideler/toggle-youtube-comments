@@ -80,7 +80,7 @@ const oldYouTube = {
     const label = document.getElementById('toggle-comments').firstElementChild;
     const countLabel = document.getElementById('comments-count');
     const comments = document.getElementById('watch-discussion');
-    
+
     countLabel.classList.toggle('is-hide'); // toggle commentsCount.
 
     if (comments.classList.toggle('hide-comments')) {
@@ -112,8 +112,8 @@ const oldYouTube = {
 
     const observerTarget = document.getElementById('watch-discussion');
     const observerConfig = { childList: true };
-    const commentsPanelObserver = new MutationObserver( mutations => {
-      mutations.some( mutation => {
+    const commentsPanelObserver = new MutationObserver(mutations => {
+      mutations.some(mutation => {
         if (mutation.addedNodes.length) {
           commentsPanelObserver.disconnect();
           console.log('OBSERVED COMMENTS PANEL...');
@@ -128,7 +128,9 @@ const oldYouTube = {
 
   _addCommentsCount() {
     console.log('FETCH COMMENTS COUNT...');
-    const targetNode = document.getElementsByClassName('comment-section-header-renderer')[0];
+    const targetNode = document.getElementsByClassName(
+      'comment-section-header-renderer'
+    )[0];
     const extractDigitArray = targetNode.textContent.match(/\d+/g);
     const countString = extractDigitArray.join();
 
@@ -148,7 +150,10 @@ const newYouTube = {
 
   registerListeners() {
     document.addEventListener('yt-register-action', newYouTube.inject); // Inject the button on comments render.
-    document.addEventListener('yt-page-data-updated', newYouTube.injectCommentsCount); // Asynchronously get comments count when navigated to video page
+    document.addEventListener('yt-page-data-updated', e => {
+      newYouTube.injectCommentsCount(e);
+      newYouTube._forceHideComments(e);
+    }); // Asynchronously get comments count when navigated to video page
     window.addEventListener('focus', newYouTube._waitCommentsCount); // When the YouTube tab is in the background state and navigate to the next movie by auto-play, the node of comments is not updated. So set this event when the user returns to Youtube tab.
   },
 
@@ -166,8 +171,7 @@ const newYouTube = {
     return (
       newYouTube.isVideo() &&
       !newYouTube.isLiveVideo() &&
-      (newYouTube._isCommentsRendered(e) ||
-      newYouTube._isPageNavigated(e))
+      (newYouTube._isCommentsRendered(e) || newYouTube._isPageNavigated(e))
     );
   },
 
@@ -180,15 +184,14 @@ const newYouTube = {
   },
 
   _isPageNavigated(e) {
-    return (
-      typeof e !== 'undefined' &&
-      e.type === 'yt-page-data-updated'
-    );
+    return typeof e !== 'undefined' && e.type === 'yt-page-data-updated';
   },
 
   _addClass() {
     console.log('ADDING CLASS...');
-    document.querySelector('ytd-item-section-renderer.ytd-comments').classList.add('hide-comments');
+    document
+      .querySelector('ytd-item-section-renderer.ytd-comments')
+      .classList.add('hide-comments');
   },
 
   _addButton() {
@@ -210,10 +213,29 @@ const newYouTube = {
       .addEventListener('click', newYouTube._toggleComments);
   },
 
+  _forceHideComments(e) {
+    const buttonLabel = document.getElementById('toggle-comments-label');
+    const countLabel = document.getElementById('comments-count');
+    const comments = document.querySelector(
+      'ytd-item-section-renderer.ytd-comments'
+    );
+
+    if (!newYouTube._ready(e) || !comments) return;
+
+    if (!comments.classList.contains('hide-comments')) {
+      console.log('FORCE HIDE COMMENTS...');
+      comments.classList.add('hide-comments'); // force hide comments
+      buttonLabel.textContent = l11n.showComments; // restore button label
+      countLabel.classList.remove('is-hide'); // restore count label
+    }
+  },
+
   _toggleComments() {
     const buttonLabel = document.getElementById('toggle-comments-label');
     const countLabel = document.getElementById('comments-count');
-    const comments = document.querySelector("ytd-item-section-renderer.ytd-comments");
+    const comments = document.querySelector(
+      'ytd-item-section-renderer.ytd-comments'
+    );
 
     countLabel.classList.toggle('is-hide'); // toggle commentsCount.
 
@@ -229,9 +251,9 @@ const newYouTube = {
 
     newYouTube._commentsState.hasGotCount = false;
     newYouTube._rewriteCommentsCount('counting');
-    newYouTube._waitCommentsCount()
+    newYouTube._waitCommentsCount();
   },
-  
+
   _commentsState: {
     hasGotCount: false,
     currentCount: '',
@@ -240,21 +262,22 @@ const newYouTube = {
   _rewriteCommentsCount(condition) {
     const label = document.getElementById('comments-count');
     if (!label) return;
-    
+
     console.log('REWRITING COMMENTS COUNT...');
-    (condition === 'counting') ? label.textContent = ''
-                               : label.textContent = newYouTube._commentsState.currentCount;
+    condition === 'counting'
+      ? (label.textContent = '')
+      : (label.textContent = newYouTube._commentsState.currentCount);
   },
 
   _waitCommentsCount() {
     if (newYouTube._commentsState.hasGotCount) return;
-    
+
     console.log('OBSERVING COMMENTS COUNT...');
 
     const observerTarget = document.getElementById('comments'); // `<ytd-comments id="comments" ...>`
     const observerConfig = { childList: true, subtree: true };
-    const commentsCountObserver = new MutationObserver( mutations => {
-      mutations.some( mutation => {
+    const commentsCountObserver = new MutationObserver(mutations => {
+      mutations.some(mutation => {
         // console.log(mutation)
         if (
           /**
@@ -262,9 +285,9 @@ const newYouTube = {
            * 1st expression(id === 'header') is for when the parse target node mutation didn't occur.
            * This occurrence condition is when navigating to same number of comments video. e.g.(5 comments to 5 comments)
            */
-          mutation.target.id === 'header'||
-          mutation.target.tagName === 'YT-FORMATTED-STRING' &&
-          mutation.target.classList.contains('count-text')
+          mutation.target.id === 'header' ||
+          (mutation.target.tagName === 'YT-FORMATTED-STRING' &&
+            mutation.target.classList.contains('count-text'))
         ) {
           commentsCountObserver.disconnect();
           console.log('OBSERVED COMMENTS COUNT...');
@@ -284,7 +307,7 @@ const newYouTube = {
     const countString = extractDigitArray.join();
     newYouTube._commentsState.hasGotCount = true;
     newYouTube._commentsState.currentCount = countString;
-    newYouTube._rewriteCommentsCount()
+    newYouTube._rewriteCommentsCount();
   },
 };
 
