@@ -5,8 +5,16 @@ const [oldTag, newTag] = shell.exec('git tag', {silent: true}).tail({'-n': 2}).s
 
 const compareText = `Changes: https://github.com/dideler/toggle-youtube-comments/compare/${oldTag}...${newTag}`
 
-// overwriting the lightweight tag with an annotated tag.
-shell.exec(`git tag --annotate --force ${newTag} ${newTag}^0 --message "${compareText}"`)
+const copyReleaseNoteFooter = () => {
+  clipboardy
+    .write(`---\n\n${compareText}`)
+    .then(() =>
+      console.log(
+        '📋 Copied the release note footer to your clipboard.\n',
+        `=> "${compareText}"`
+      )
+    );
+};
 
 // Copy markdown text.
 clipboardy.writeSync(`---\n\n${compareText}`);
