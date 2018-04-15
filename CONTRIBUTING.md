@@ -34,7 +34,7 @@ what to say no to, and where we need help.
 # Development
 
 After you've forked and/or cloned the git repository, you'll
-need to [load the extension into Chrome](https://developer.chrome.com/extensions/getstarted#unpacked).
+need to [load the extension into Chrome](https://developer.chrome.com/extensions/getstarted#manifest).
 
 During development, you'll want to make sure that the
 extension continues to work on Old YouTube (OYT) and New
