@@ -227,7 +227,7 @@ const newYouTube = {
       console.log('FORCE HIDE COMMENTS...');
       comments.classList.add('hide-comments'); // force hide comments
       buttonLabel.textContent = l11n.showComments; // restore button label
-      countLabel.classList.remove('is-hide'); // restore count label
+      countLabel.classList.remove('hide-count'); // restore count label
     }
   },
 
