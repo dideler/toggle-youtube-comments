@@ -8,8 +8,9 @@
     "compress": "node tasks/compress.js",
     "pack": "node tasks/pack.js",
     "build": "run-s clean compress pack",
+    "preversion": "git fetch --tags",
     "version": "node tasks/bump-manifest.js && git add src/manifest.json",
-    "postversion": "git push && git push --tags",
+    "postversion": "node tasks/annotate-tag.js && git push && git push --tags",
     "release": "echo \"Error: no release specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +24,7 @@
   "homepage": "https://github.com/dideler/toggle-youtube-comments#readme",
   "devDependencies": {
     "clean-css-cli": "^4.1.10",
+    "clipboardy": "^1.2.3",
     "fast-glob": "^2.1.0",
     "imagemin": "^5.3.1",
     "imagemin-pngquant": "^5.0.1",
