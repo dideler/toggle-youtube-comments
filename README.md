@@ -16,8 +16,7 @@
 
 ## Usage
 
-[View the extension on the Chrome Web Store][store] to see screenshots,
-features, and add it to Chrome.
+[View the extension on the Chrome Web Store][store] to see screenshots, features, and add it to Chrome.
 
 [store]: https://chrome.google.com/webstore/detail/toggle-youtube-comments/ampjnmipdgicjjidohpkidhghakoidfm
 
@@ -28,9 +27,8 @@ how to develop, test, and publish the extension.
 
 ## Conduct
 
-See our [code of conduct](/CODE_OF_CONDUCT.md) for the behaviour we expect
-from the community and team members. It also explains how to report an
-incident, and how we enforce the code of conduct.
+See our [code of conduct](/CODE_OF_CONDUCT.md) for the behaviour we expect from the community and team members.  
+It also explains how to report an incident, and how we enforce the code of conduct.
 
 ## License
 
