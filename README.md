@@ -23,8 +23,8 @@ features, and add it to Chrome.
 
 ## Contributing
 
-See the [contributing guide](/CONTRIBUTING.md) for the goals of the project,
-how to develop, test, publish the extension.
+See the [contributing guide](/CONTRIBUTING.md) for the goals of the project and
+how to develop, test, and publish the extension.
 
 ## Conduct
 
