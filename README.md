@@ -6,6 +6,12 @@
   Toggle YouTube Comments
 </h1>
 
+[![Version on Chrome Web Store](https://img.shields.io/chrome-web-store/v/ampjnmipdgicjjidohpkidhghakoidfm.svg?style=for-the-badge)][store]
+[![Number of users on Chrome Web Store](https://img.shields.io/chrome-web-store/users/ampjnmipdgicjjidohpkidhghakoidfm.svg?style=for-the-badge)][store]
+[![Rating on Chrome Web Store](https://img.shields.io/chrome-web-store/stars/ampjnmipdgicjjidohpkidhghakoidfm.svg?style=for-the-badge)][store]
+
+[![Install from Chrome Web Store](https://user-images.githubusercontent.com/497458/42402524-3cbe146c-8173-11e8-9e68-8c01ab968e77.png)][store]
+
 > Collapses YouTube comments by default
 
 ## Usage
