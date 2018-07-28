@@ -8,6 +8,7 @@ Before you start, please take a moment to read this guide.
 * [Development](#development)
 * [Test](#test)
 * [Release](#release)
+* [Admin & Monitoring](#admin--monitoring)
 
 # Goals
 
