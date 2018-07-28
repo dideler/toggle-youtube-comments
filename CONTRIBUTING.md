@@ -90,3 +90,12 @@ You can view all scripts with `npm run`.
 
 Releases with signficant visual changes should use new images on the Chrome Web Store.  
 Please [upload a copy of the images to GitHub](../../issues/32).
+
+# Admin & Monitoring
+
+**Disclaimer:** _This section is solely for publishers of this extension on the Google Chrome Store.
+Trusted collaborators can [apply to be added as a publisher](https://github.com/dideler/toggle-youtube-comments/issues/26#issuecomment-359970408)._
+
+- [Developer dashboard](https://chrome.google.com/webstore/developer/dashboard/uafb8833e0e606a462093ebe52d5eda3d)
+- [Recent stats](https://chrome.google.com/webstore/developer/stats/ampjnmipdgicjjidohpkidhghakoidfm)
+- [Recent reviews](https://chrome.google.com/webstore/detail/toggle%C2%A0youtube%C2%A0comments/ampjnmipdgicjjidohpkidhghakoidfm/reviews)
