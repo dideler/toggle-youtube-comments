@@ -80,12 +80,15 @@ Trusted collaborators can [apply to be added as a publisher](https://github.com/
 
 1. Install/update build dependencies with `npm install`
 1. Bump version using [npm-version](https://docs.npmjs.com/cli/version), e.g. `npm version patch`
-   - This also creates a version commit and an annotated tag then pushes both to GitHub
+   - Creates a version commit and an annotated tag, then pushes both to GitHub
+   - Copies a [template for release notes](https://github.com/dideler/toggle-youtube-comments/issues/27#issuecomment-360982010) to the clipboard
    - Note the project uses [semantic versioning](https://semver.org/)
 1. Create [release notes](../../releases) on GitHub
-   - The earlier `npm version` step should have copied to your clipboard [a link to view code changes with a tag comparison](https://github.com/dideler/toggle-youtube-comments/issues/27#issuecomment-360982010) - include this in the release notes
+   - Recommended to use the template from the previous step
 1. Build the extension package with `npm run build`
-1. Upload the zipped package to the Chrome Web Store via the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
+   - Creates distributable files in the local `_dir` directory
+   - Creates a new release in the local `_packages` directory
+1. Upload the zipped package of the release to the Chrome Web Store via the [Developer Dashboard](https://chrome.google.com/webstore/developer/dashboard)
 
 You can view all scripts with `npm run`.
 
