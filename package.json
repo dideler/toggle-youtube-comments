@@ -1,6 +1,6 @@
 {
   "name": "toggle-youtube-comments",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "description": "Hides YouTube comments by default",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
