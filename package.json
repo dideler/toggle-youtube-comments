@@ -27,7 +27,7 @@
     "clipboardy": "^1.2.3",
     "fast-glob": "^2.1.0",
     "imagemin": "^5.3.1",
-    "imagemin-pngquant": "^5.0.1",
+    "imagemin-pngquant": "^6.0.0",
     "jsonfile": "^4.0.0",
     "moment": "^2.20.1",
     "npm-run-all": "^4.1.2",
