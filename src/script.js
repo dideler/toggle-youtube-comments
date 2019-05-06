@@ -196,22 +196,47 @@ const newYouTube = {
   },
 
   _addButton() {
-    console.log('ADDING BUTTON...');
-    const moreButton = document.getElementById('more');
-    const button = `
-    <button class="fake-paper-button" id="toggle-comments" type="button">
-      <div class="fake-yt-formatted-string">
-        <span id="toggle-comments-label">${l11n.showComments}</span>
-        &nbsp;<span id="comments-count"></span>
-      </div>
-    </button>
-    `;
+    function waitRenderAddPoint() {
+      return new Promise(resolve => {
+        console.log('OBSERVING BUTTON ADD POINT...');
+        const observerTarget = document.getElementById('meta');
+        const observerConfig = { childList: true, subtree: true };
+        const insertPointObserver = new MutationObserver(mutations => {
+          mutations.some(mutation => {
+            // console.log(mutation);
+            if (mutation.target.id === 'more') {
+              insertPointObserver.disconnect();
+              console.log('OBSERVED BUTTON ADD POINT...');
+              resolve();
+              return true; // the same as "break" in `Array.some()`
+            }
+          });
+        });
 
-    moreButton.insertAdjacentHTML('afterend', button);
+        insertPointObserver.observe(observerTarget, observerConfig);
+      });
+    }
 
-    document
-      .getElementById('toggle-comments')
-      .addEventListener('click', newYouTube._toggleComments);
+    function add() {
+      console.log('ADDING BUTTON...');
+      const moreButton = document.getElementById('more');
+      const button = `
+        <button class="fake-paper-button" id="toggle-comments" type="button">
+          <div class="fake-yt-formatted-string">
+            <span id="toggle-comments-label">${l11n.showComments}</span>
+            &nbsp;<span id="comments-count"></span>
+          </div>
+        </button>
+      `;
+
+      moreButton.insertAdjacentHTML('afterend', button);
+
+      document
+        .getElementById('toggle-comments')
+        .addEventListener('click', newYouTube._toggleComments);
+    }
+
+    waitRenderAddPoint().then(add);
   },
 
   _forceHideComments(e) {
