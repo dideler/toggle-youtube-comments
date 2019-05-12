@@ -34,8 +34,9 @@ what to say no to, and where we need help.
 
 # Development
 
-After you've forked and/or cloned the git repository, you'll
-need to [load the extension into Chrome](https://developer.chrome.com/extensions/getstarted#manifest).
+After you've cloned the git repository, you'll need to
+[load the unpacked extension into Chrome](https://developer.chrome.com/extensions/getstarted#manifest).  
+Choose the project's `src` directory as the extension's directory, as it contains the manifest file.
 
 During development, make sure that the extension continues to
 work on Old YouTube (OYT) and New YouTube (NYT).
