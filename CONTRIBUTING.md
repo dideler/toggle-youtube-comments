@@ -37,15 +37,12 @@ what to say no to, and where we need help.
 After you've forked and/or cloned the git repository, you'll
 need to [load the extension into Chrome](https://developer.chrome.com/extensions/getstarted#manifest).
 
-During development, you'll want to make sure that the
-extension continues to work on Old YouTube (OYT) and New
-YouTube (NYT).
+During development, make sure that the extension continues to
+work on Old YouTube (OYT) and New YouTube (NYT).
 
-To switch from OYT to NYT, visit youtube.com/new.
+- To switch from OYT to NYT, visit [youtube.com/new](https://youtube.com/new).
 
-To switch from NYT to OYT, go to your account menu at the top
-right of the YouTube page and select "Restore old YouTube" (should
-be the last option the list).
+- To switch from NYT to OYT, [refer to the latest steps](https://github.com/dideler/toggle-youtube-comments/issues/7#issuecomment-450763039).
 
 # Test
 
